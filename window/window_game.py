@@ -6,6 +6,7 @@ class Game:
 
         """ Код окна """
         self.bg = pygame.image.load("bikers_game_img/background/back.png")
+        self.font = pygame.font.SysFont("Arial", 20)
 
         """ Игроки """
         self.one_player_jump = pygame.image.load("bikers_game_img/player/pl_1_jump.png")
@@ -26,15 +27,37 @@ class Game:
         self.p4_platform = pygame.image.load("bikers_game_img/platform/platform_4.png")
 
         """ Переменные """
+        self.hp_platform_one = 100
+        self.hp_platform_two = 100
+
         self.start_animation_one = 0
         self.start_animation_two = 0
-        self.state_platform = 1
+        self.state_platform_one = 1
         self.state_platform_two = 1
         self.table_pos = 0
         self.speed = 5
 
         self.jump_one_player = False
         self.jump_two_player = False
+
+    def platform_mechanics(self, player):
+        setattr(self, f"hp_platform_{player}", getattr(self, f"hp_platform_{player}") - 10)
+
+        hp = getattr(self, f"hp_platform_{player}")
+
+        if 80 <= hp <= 100:
+            setattr(self, f"state_platform_{player}", 1)
+        elif 70 <= hp < 80:
+            setattr(self, f"state_platform_{player}", 2)
+        elif 40 <= hp < 70:
+            setattr(self, f"state_platform_{player}", 3)
+        elif 0 <= hp < 40:
+            setattr(self, f"state_platform_{player}", 4)
+        else:
+            print("Вы выиграли")
+
+        setattr(self, f"jump_{player}_player", True)
+        setattr(self, f"start_animation_{player}", pygame.time.get_ticks())
 
     def run(self):
         while True:
@@ -50,17 +73,9 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_s:
-                        self.jump_one_player = True
-                        self.state_platform += 1
-                        self.start_animation_one = pygame.time.get_ticks()
-                        # self.table_pos -= self.speed
+                        self.platform_mechanics("one")
                     if event.key == pygame.K_l:
-                        self.jump_two_player = True
-                        self.state_platform_two += 1
-                        self.start_animation_two = pygame.time.get_ticks()
-                        # self.table_pos += self.speed
-
-            x = 400 + self.table_pos
+                        self.platform_mechanics("two")
 
             # PLAYER 1
             if self.jump_one_player:
@@ -82,8 +97,12 @@ class Game:
             else:
                 self.screen.blit(two_player, (650, 110))
 
+            # HP Players
+            self.screen.blit(self.font.render(f"hp - {self.hp_platform_one}", True, (255, 255, 255)), (100, 0))
+            self.screen.blit(self.font.render(f"hp - {self.hp_platform_two}", True, (255, 255, 255)), (650, 0))
+
             # platform for one_player
-            self.screen.blit(getattr(self, f"p{self.state_platform}_platform"), (100, 200))
+            self.screen.blit(getattr(self, f"p{self.state_platform_one}_platform"), (100, 200))
 
             # platform for one_player
             self.screen.blit(getattr(self, f"p{self.state_platform_two}_platform"), (650, 200))
