@@ -20,6 +20,8 @@ class Game:
         self.four_player_jump = pygame.image.load("bikers_game_img/player/pl_4_jump.png")
         self.four_player = pygame.image.load("bikers_game_img/player/pl_4.png")
 
+        self.first_platform = pygame.image.load("bikers_game_img/platform/platform_1.png")
+
         """ Переменные """
         self.start_animation_one = 0
         self.start_animation_two = 0
@@ -32,7 +34,7 @@ class Game:
     def run(self):
         while True:
 
-            self.screen.blit(self.bg, (-500, 0))
+            self.screen.blit(self.bg, (-200, 0))
 
             one_player = pygame.transform.flip(self.tree_player, True, False)
             one_player_jump = pygame.transform.flip(self.tree_player_jump, True, False)
@@ -53,30 +55,31 @@ class Game:
 
             x = 400 + self.table_pos
 
-            pygame.draw.rect(self.screen, (200, 180, 100), (x - 50, 190, 100, 20))
-
             # PLAYER 1
             if self.jump_one_player:
                 if self.start_animation_one + 150 < pygame.time.get_ticks():
                     self.jump_one_player = False
-                    self.screen.blit(one_player, (100, 200))
+                    self.screen.blit(one_player, (100, 110))
                 else:
-                    self.screen.blit(one_player_jump, (100, 200))
+                    self.screen.blit(one_player_jump, (100, 110))
             else:
-                self.screen.blit(one_player, (100, 200))
+                self.screen.blit(one_player, (100, 110))
 
             # PLAYER 2
             if self.jump_two_player:
                 if self.start_animation_two + 150 < pygame.time.get_ticks():
                     self.jump_two_player = False
-                    self.screen.blit(two_player, (650, 200))
+                    self.screen.blit(two_player, (650, 110))
                 else:
-                    self.screen.blit(two_player_jump, (650, 200))
+                    self.screen.blit(two_player_jump, (650, 110))
             else:
-                self.screen.blit(two_player, (650, 200))
+                self.screen.blit(two_player, (650, 110))
 
-            # pygame.draw.line(self.screen, (255, 255, 255), (400, 0), (400, 400), 2)
+            # platform for one_player
+            self.screen.blit(self.first_platform, (100, 200))
 
+            # platform for one_player
+            self.screen.blit(self.first_platform, (650, 200))
 
             pygame.display.flip()
             pygame.time.Clock()
