@@ -27,8 +27,8 @@ class Game:
         self.p4_platform = pygame.image.load("bikers_game_img/platform/platform_4.png")
 
         """ Переменные """
-        self.hp_platform_one = 100
-        self.hp_platform_two = 100
+        self.hp_platform_one = 1000
+        self.hp_platform_two = 1000
 
         self.start_animation_one = 0
         self.start_animation_two = 0
