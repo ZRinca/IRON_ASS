@@ -5,6 +5,7 @@ class Game:
         self.screen = screen
 
         """ Код окна """
+        self.button = pygame.image.load("bikers_game_img/menu_objects/Button.png")
         self.bg = pygame.image.load("bikers_game_img/background/back.png")
         self.font = pygame.font.SysFont("Arial", 20)
 
@@ -59,10 +60,12 @@ class Game:
         setattr(self, f"jump_{player}_player", True)
         setattr(self, f"start_animation_{player}", pygame.time.get_ticks())
 
+
     def run(self):
         while True:
 
             self.screen.blit(self.bg, (-200, 0))
+            button = pygame.image.load("bikers_game_img/menu_objects/Button.png")
 
             one_player = pygame.transform.flip(self.tree_player, True, False)
             one_player_jump = pygame.transform.flip(self.tree_player_jump, True, False)
@@ -70,12 +73,17 @@ class Game:
             two_player = pygame.transform.flip(self.four_player, False, False)
             two_player_jump = pygame.transform.flip(self.four_player_jump, False, False)
 
+            button_back_menu = button.get_rect(topleft=(400, 10))
+
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_s:
                         self.platform_mechanics("one")
                     if event.key == pygame.K_l:
                         self.platform_mechanics("two")
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if button_back_menu.collidepoint(event.pos):
+                        return "menu"
 
             # PLAYER 1
             if self.jump_one_player:
@@ -96,6 +104,9 @@ class Game:
                     self.screen.blit(two_player_jump, (650, 110))
             else:
                 self.screen.blit(two_player, (650, 110))
+
+            self.screen.blit(button, button_back_menu)
+            self.screen.blit(self.font.render(f"Обратно в меню", True, (255, 255, 255)), (450, 60))
 
             # HP Players
             self.screen.blit(self.font.render(f"hp - {self.hp_platform_one}", True, (255, 255, 255)), (100, 0))
