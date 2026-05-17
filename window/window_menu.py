@@ -8,6 +8,7 @@ class Menu:
         self.bg = pygame.image.load("bikers_game_img/background/menu.png")
 
         self.button = pygame.image.load("bikers_game_img/menu_objects/Button.png")
+        self.button_x = 650
 
         self.button_menu_language = ['Играть', 'Oynamak', 'Play']
         self.button_menu_settings = ['Настройки', 'Ayarlar', 'settings']
@@ -18,9 +19,9 @@ class Menu:
 
         button_img = pygame.image.load("bikers_game_img/menu_objects/Button.png")
 
-        button_menu_rect = button_img.get_rect(topleft=(650, 50))
-        button_settings_rect = button_img.get_rect(topleft=(650, 150))
-        button_quit_rect = button_img.get_rect(topleft=(650, 250))
+        button_menu_rect = button_img.get_rect(topleft=(self.button_x, 50))
+        button_settings_rect = button_img.get_rect(topleft=(self.button_x, 150))
+        button_quit_rect = button_img.get_rect(topleft=(self.button_x, 250))
 
         while True:
             self.screen.blit(self.bg, (0, 0))
@@ -42,7 +43,7 @@ class Menu:
             self.screen.blit(self.font.render(f"{self.button_menu_language[entered_language]}", True, (255, 255, 255)), (745, 100))
 
             self.screen.blit(button_img, button_settings_rect)
-            self.screen.blit(self.font.render(f"{self.button_menu_settings[entered_language]}", True, (255, 255, 255)), (745, 200))
+            self.screen.blit(self.font.render(f"{self.button_menu_settings[entered_language]}", True, (255, 255, 255)), (730, 200))
 
             self.screen.blit(button_img, button_quit_rect)
             self.screen.blit(self.font.render(f"{self.button_menu_quit[entered_language]}", True, (255, 255, 255)), (745, 300))

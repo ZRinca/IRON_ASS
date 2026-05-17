@@ -8,6 +8,7 @@ class Game:
         self.button = pygame.image.load("bikers_game_img/menu_objects/Button.png")
         self.bg = pygame.image.load("bikers_game_img/background/back.png")
         self.font = pygame.font.SysFont("Arial", 20)
+        self.font_hp = pygame.font.SysFont("Arial", 34)
 
         """ Игроки """
         self.one_player_jump = pygame.image.load("bikers_game_img/player/pl_1_jump.png")
@@ -26,6 +27,10 @@ class Game:
         self.p2_platform = pygame.image.load("bikers_game_img/platform/platform_2.png")
         self.p3_platform = pygame.image.load("bikers_game_img/platform/platform_3.png")
         self.p4_platform = pygame.image.load("bikers_game_img/platform/platform_4.png")
+
+        self.hp_platform_bg = pygame.image.load("bikers_game_img/menu_objects/bg_hp.png")
+
+        self.button_up = pygame.transform.scale(pygame.image.load("bikers_game_img/menu_objects/button_up.png"), (150, 150))
 
         """ Переменные """
         self.hp_platform_one = 100
@@ -67,7 +72,7 @@ class Game:
         while True:
 
             self.screen.blit(self.bg, (-200, 0))
-            button = pygame.image.load("bikers_game_img/menu_objects/Button.png")
+            button = pygame.image.load("bikers_game_img/menu_objects/bg_name.png")
 
             one_player = pygame.transform.flip(self.tree_player, True, False)
             one_player_jump = pygame.transform.flip(self.tree_player_jump, True, False)
@@ -75,7 +80,11 @@ class Game:
             two_player = pygame.transform.flip(self.four_player, False, False)
             two_player_jump = pygame.transform.flip(self.four_player_jump, False, False)
 
-            button_back_menu = button.get_rect(topleft=(400, 10))
+            button_back_menu = button.get_rect(topleft=(400, 40))
+
+            # button control for player
+            button_up_one_player = button.get_rect(topleft=(50, 300))
+            button_up_two_player = button.get_rect(topleft=(800, 300))
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -86,39 +95,50 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if button_back_menu.collidepoint(event.pos):
                         return "menu"
+                    if button_up_one_player.collidepoint(event.pos):
+                        self.platform_mechanics("one")
+                    if button_up_two_player.collidepoint(event.pos):
+                        self.platform_mechanics("two")
 
             # PLAYER 1
             if self.jump_one_player:
                 if self.start_animation_one + 150 < pygame.time.get_ticks():
                     self.jump_one_player = False
-                    self.screen.blit(one_player, (100, 110))
+                    self.screen.blit(one_player, (200, 110))
                 else:
-                    self.screen.blit(one_player_jump, (100, 110))
+                    self.screen.blit(one_player_jump, (200, 110))
             else:
-                self.screen.blit(one_player, (100, 110))
+                self.screen.blit(one_player, (200, 110))
 
             # PLAYER 2
             if self.jump_two_player:
                 if self.start_animation_two + 150 < pygame.time.get_ticks():
                     self.jump_two_player = False
-                    self.screen.blit(two_player, (650, 110))
+                    self.screen.blit(two_player, (550, 110))
                 else:
-                    self.screen.blit(two_player_jump, (650, 110))
+                    self.screen.blit(two_player_jump, (550, 110))
             else:
-                self.screen.blit(two_player, (650, 110))
+                self.screen.blit(two_player, (550, 110))
 
             self.screen.blit(button, button_back_menu)
-            self.screen.blit(self.font.render(f"{self.button_back_menu[entered_language]}", True, (255, 255, 255)), (450, 60))
+            self.screen.blit(self.font.render(f"{self.button_back_menu[entered_language]}", True, (255, 255, 255)), (450, 58))
 
-            # HP Players
-            self.screen.blit(self.font.render(f"hp - {self.hp_platform_one}", True, (255, 255, 255)), (100, 0))
-            self.screen.blit(self.font.render(f"hp - {self.hp_platform_two}", True, (255, 255, 255)), (650, 0))
+            # HP Players one
+            self.screen.blit(self.hp_platform_bg, (50, -60))
+            self.screen.blit(self.font_hp.render(f"{self.hp_platform_one}", True, (255, 255, 255)), (150, 50))
+
+            # HP Players two
+            self.screen.blit(self.hp_platform_bg, (700, -60))
+            self.screen.blit(self.font_hp.render(f"{self.hp_platform_two}", True, (255, 255, 255)), (800, 50))
 
             # platform for one_player
-            self.screen.blit(getattr(self, f"p{self.state_platform_one}_platform"), (100, 200))
+            self.screen.blit(getattr(self, f"p{self.state_platform_one}_platform"), (200, 200))
 
             # platform for one_player
-            self.screen.blit(getattr(self, f"p{self.state_platform_two}_platform"), (650, 200))
+            self.screen.blit(getattr(self, f"p{self.state_platform_two}_platform"), (550, 200))
+
+            self.screen.blit(self.button_up, button_up_one_player)
+            self.screen.blit(self.button_up, button_up_two_player)
 
             pygame.display.flip()
             pygame.time.Clock()
