@@ -11,6 +11,7 @@ class CoreGame:
 
         """ Код окна """
         self.screen = pygame.display.set_mode((1000, 500))
+        self.entered_language = 0
         self.state_window = "menu"
 
         """ Окна """
@@ -22,8 +23,8 @@ class CoreGame:
     def run(self):
         while True:
             if self.state_window == "menu":
-                self.state_window = self.menu.run()
+                self.state_window = self.menu.run(self.entered_language)
             if self.state_window == "settings":
-                self.state_window = self.settings.run()
+                self.state_window, self.entered_language = self.settings.run(self.entered_language)
             if self.state_window == "game":
-                self.state_window = self.game.run()
+                self.state_window = self.game.run(self.entered_language)

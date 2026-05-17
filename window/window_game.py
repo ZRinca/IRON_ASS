@@ -28,8 +28,8 @@ class Game:
         self.p4_platform = pygame.image.load("bikers_game_img/platform/platform_4.png")
 
         """ Переменные """
-        self.hp_platform_one = 1000
-        self.hp_platform_two = 1000
+        self.hp_platform_one = 100
+        self.hp_platform_two = 100
 
         self.start_animation_one = 0
         self.start_animation_two = 0
@@ -37,6 +37,8 @@ class Game:
         self.state_platform_two = 1
         self.table_pos = 0
         self.speed = 5
+
+        self.button_back_menu = ['Обратно в меню' ,'Menüye geri dön' ,'Back to menu' ]
 
         self.jump_one_player = False
         self.jump_two_player = False
@@ -61,7 +63,7 @@ class Game:
         setattr(self, f"start_animation_{player}", pygame.time.get_ticks())
 
 
-    def run(self):
+    def run(self, entered_language=0):
         while True:
 
             self.screen.blit(self.bg, (-200, 0))
@@ -106,7 +108,7 @@ class Game:
                 self.screen.blit(two_player, (650, 110))
 
             self.screen.blit(button, button_back_menu)
-            self.screen.blit(self.font.render(f"Обратно в меню", True, (255, 255, 255)), (450, 60))
+            self.screen.blit(self.font.render(f"{self.button_back_menu[entered_language]}", True, (255, 255, 255)), (450, 60))
 
             # HP Players
             self.screen.blit(self.font.render(f"hp - {self.hp_platform_one}", True, (255, 255, 255)), (100, 0))
